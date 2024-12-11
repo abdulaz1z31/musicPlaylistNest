@@ -1,19 +1,21 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { FavoritesModule } from './favorites/favorites.module';
 import { AlbumModule } from './album/album.module';
 import { TrackModule } from './track/track.module';
-import { AlbumsModule } from './albums/albums.module';
 import { ArtistModule } from './artist/artist.module';
-import { ArtistModule } from './artist/artist.module';
-import { ResModule } from './users/res/res.module';
-import { UsersModule } from './users/users.module';
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
-  imports: [UsersModule, ResModule, ArtistModule, AlbumsModule, TrackModule, AlbumModule, FavoritesModule],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [
+    MongooseModule.forRoot('mongodb://localhost:27017/lesson67'),
+    UsersModule,
+    ArtistModule,
+    TrackModule,
+    AlbumModule,
+    FavoritesModule,
+  ],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
