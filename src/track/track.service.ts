@@ -21,8 +21,40 @@ export class TrackService {
     }
     return newTrack;
   }
-  async getAll() {}
-  async getById() {}
-  async update() {}
-  async delete() {}
+  async getAll(): Promise<Track[] | message> {
+    const tracks = await this.trackModel.find();
+    if (tracks.length == 0) {
+      return {
+        message: 'Tracks not found',
+        statusCode: 200,
+      };
+    }
+    return tracks;
+  }
+  async getById(id: string): Promise<Track | message> {
+    const track = await this.trackModel.findById({ id });
+    if (!track) {
+      return {
+        message: 'Track not found',
+        statusCode: 403,
+      };
+    }
+    return track;
+  }
+  async update(newData: CreateTrackDto, id: string): Promise<Track | message> {
+    const track = await this.trackModel.findByIdAndUpdate(id, newData, {
+      new: true,
+    });
+    if (track) {
+      return {
+        message: 'Error while updating track',
+        statusCode: 500,
+      };
+    }
+    return track;
+  }
+  async delete(id: string): Promise<message> {
+    await this.trackModel.findByIdAndDelete(id);
+    return { message: 'Deleted successfully', statusCode: 200 };
+  }
 }
