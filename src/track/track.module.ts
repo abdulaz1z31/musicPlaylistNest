@@ -5,7 +5,9 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { trackSchema } from './schema/track.schema';
 
 @Module({
-  imports: [MongooseModule.forFeature([{name: 'tracks', schema: trackSchema}])]
+  imports: [
+    MongooseModule.forFeature([{ name: 'tracks', schema: trackSchema }]),
+  ],
   controllers: [TrackController],
   providers: [TrackService],
 })
