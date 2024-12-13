@@ -1,26 +1,36 @@
 import { Injectable } from '@nestjs/common';
 import { CreateFavoriteDto } from './dto/create-favorite.dto';
 import { UpdateFavoriteDto } from './dto/update-favorite.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { Favorite } from './schema/favorite.schema';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class FavoritesService {
-  create(createFavoriteDto: CreateFavoriteDto) {
-    return 'This action adds a new favorite';
+  constructor(
+    @InjectModel('favorites') private favoriteModel: Model<Favorite>,
+  ) {}
+  async create(createFavoriteDto: CreateFavoriteDto): Promise<Favorite> {
+    const favorite = new this.favoriteModel(createFavoriteDto);
+    await favorite.save();
+    return favorite;
   }
 
-  findAll() {
-    return `This action returns all favorites`;
+  async findAll(): Promise<Favorite[]> {
+    return await this.favoriteModel.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} favorite`;
+  async findOne(id: number) {
+    return await this.favoriteModel.findById(id);
   }
 
-  update(id: number, updateFavoriteDto: UpdateFavoriteDto) {
-    return `This action updates a #${id} favorite`;
+  async update(id: number, updateFavoriteDto: UpdateFavoriteDto) {
+    return await this.favoriteModel.findByIdAndUpdate(id, updateFavoriteDto, {
+      new: true,
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} favorite`;
+  async remove(id: number) {
+    return await this.favoriteModel.findByIdAndDelete(id);
   }
 }
